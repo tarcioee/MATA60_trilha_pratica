@@ -1,88 +1,93 @@
-CREATE TABLE Produto (
-    nm_prod VARCHAR(255),
-    cd_ean_prod VARCHAR(255) UNIQUE,
-    ce_categoria_principal INT,
-    ce_categoria_secundaria INT,
-    cp_Produto INT PRIMARY KEY,
-    idCategoria INT,
-    idRfid INT,
-    FOREIGN KEY (idCategoria) REFERENCES Categoria (cp_Categoria),
-    FOREIGN KEY (idRfid) REFERENCES Rfid (cp_Rfid)
+CREATE TABLE Função (
+	horas INT,
+	salario DECIMAL(10, 2),
+	nm_função VARCHAR(60),
+	cp_Função INT PRIMARY KEY
 );
 
 CREATE TABLE Rfid (
-    ind_venda_dispositivo INT,
-    cp_Rfid INT PRIMARY KEY
+	ind_venda_dispositivo BOOLEAN NOT NULL,
+	cp_Rfid INT PRIMARY KEY
 );
 
 CREATE TABLE Categoria (
-    nm_categoria VARCHAR(255),
-    cp_Categoria INT PRIMARY KEY
+	nm_categoria VARCHAR(20),
+	min_estoque_loja INT,
+	max_estoque_loja INT,
+min_estoque_deposito INT,
+	max_estoque_deposito INT,
+	cp_Categoria INT PRIMARY KEY
+);
+
+CREATE TABLE Produto (
+	nm_prod VARCHAR(60),
+localizacao_prod VARCHAR(8) NOT NULL CHECK (localizacao_prod  IN ('loja', 'deposito')),
+	cd_ean_prod VARCHAR(12) UNIQUE,
+	ce_categoria_principal INT,
+	ce_categoria_secundaria INT,
+	cp_Produto INT PRIMARY KEY,
+	idCategoria INT,
+	idRfid INT,
+	FOREIGN KEY (idCategoria) REFERENCES Categoria (cp_Categoria),
+	FOREIGN KEY (idRfid) REFERENCES Rfid (cp_Rfid)
 );
 
 CREATE TABLE Estabelecimento (
-    nm_estab VARCHAR(255) NOT NULL,
-    cnpj_estab VARCHAR(14) NOT NULL UNIQUE,
-    localizacao_esta VARCHAR(255),
-    endereco_estab VARCHAR(255),
-    UF_estab CHAR(2),
-    cidade_estab VARCHAR(255),
-    cp_Estabelecimento INT PRIMARY KEY
+	nm_estab VARCHAR(60) NOT NULL,
+	cnpj_estab VARCHAR(60) NOT NULL UNIQUE,
+	localizacao_esta VARCHAR(255), 
+	endereco_estab VARCHAR(200),
+	UF_estab CHAR(2),
+	cidade_estab VARCHAR(5),
+	cp_Estabelecimento INT PRIMARY KEY
 );
 
 CREATE TABLE Fornecedor (
-    endereco_forn VARCHAR(255),
-    localizacao_forn VARCHAR(255),
-    cnpj_forn VARCHAR(14) NOT NULL UNIQUE,
-    UF_forn CHAR(2),
-    cidade_forn VARCHAR(255),
-    cp_Fornecedor INT PRIMARY KEY
+	endereco_forn VARCHAR(200),
+	localizacao_forn VARCHAR(255),
+	cnpj_forn VARCHAR(14) NOT NULL UNIQUE,
+	UF_forn CHAR(2),
+	cidade_forn VARCHAR(255),
+	status_forn VARCHAR(10) NOT NULL CHECK (status_forn IN ('ativo', 'inativo')),
+	cp_Fornecedor INT PRIMARY KEY
 );
 
 CREATE TABLE Funcionário (
-    nm_func VARCHAR(255) NOT NULL,
-    cpf_func CHAR(11) NOT NULL UNIQUE,
-    cp_Funcionário INT PRIMARY KEY,
-    idFunção INT,
-    FOREIGN KEY (idFunção) REFERENCES Função (cp_Função)
-);
-
-CREATE TABLE Função (
-    horas INT,
-    salario DECIMAL(10, 2),
-    nm_função VARCHAR(255),
-    cp_Função INT PRIMARY KEY
+	nm_func VARCHAR(255) NOT NULL,
+	cpf_func CHAR(11) NOT NULL UNIQUE,
+	cp_Funcionário INT PRIMARY KEY,
+	idFunção INT,
+	FOREIGN KEY (idFunção) REFERENCES Função (cp_Função)
 );
 
 CREATE TABLE Fornece (
-    preço_de_venda DECIMAL(10, 2),
-    data_de_vencimento DATE,
-    data_de_venda DATE,
-    quantidade INT,
-    cp_Produto INT,
-    cp_Fornecedor INT,
-    PRIMARY KEY (cp_Produto, cp_Fornecedor),
-    FOREIGN KEY (cp_Produto) REFERENCES Produto (cp_Produto),
-    FOREIGN KEY (cp_Fornecedor) REFERENCES Fornecedor (cp_Fornecedor)
+	preço_de_venda DECIMAL(10, 2),
+	data_de_vencimento DATE,
+	data_de_venda DATE,
+	quantidade INT,
+	cp_Produto INT,
+	cp_Fornecedor INT,
+	PRIMARY KEY (cp_Produto, cp_Fornecedor),
+	FOREIGN KEY (cp_Produto) REFERENCES Produto (cp_Produto),
+	FOREIGN KEY (cp_Fornecedor) REFERENCES Fornecedor (cp_Fornecedor)
 );
 
 CREATE TABLE Vende (
-    info_item_comprado VARCHAR(255),
-    preço DECIMAL(10, 2),
-    data_de_venda DATE,
-    quantidade INT,
-    cp_Estabelecimento INT,
-    cp_Produto INT,
-    PRIMARY KEY (cp_Estabelecimento, cp_Produto),
-    FOREIGN KEY (cp_Estabelecimento) REFERENCES Estabelecimento (cp_Estabelecimento),
-    FOREIGN KEY (cp_Produto) REFERENCES Produto (cp_Produto)
+	info_item_comprado TEXT NOT NULL,
+	preço DECIMAL(10, 2) NOT NULL,
+	data_de_venda DATE NOT NULL,
+	quantidade INT,
+	cp_Estabelecimento INT,
+	cp_Produto INT,
+	PRIMARY KEY (cp_Estabelecimento, cp_Produto),
+	FOREIGN KEY (cp_Estabelecimento) REFERENCES Estabelecimento (cp_Estabelecimento),
+	FOREIGN KEY (cp_Produto) REFERENCES Produto (cp_Produto)
 );
 
 CREATE TABLE Repõem (
-    cp_Estabelecimento INT,
-    cp_Funcionário INT,
-    PRIMARY KEY (cp_Estabelecimento, cp_Funcionário),
-    FOREIGN KEY (cp_Estabelecimento) REFERENCES Estabelecimento (cp_Estabelecimento),
-    FOREIGN KEY (cp_Funcionário) REFERENCES Funcionário (cp_Funcionário)
+	cp_Estabelecimento INT,
+	cp_Funcionário INT,
+	PRIMARY KEY (cp_Estabelecimento, cp_Funcionário),
+	FOREIGN KEY (cp_Estabelecimento) REFERENCES Estabelecimento (cp_Estabelecimento),
+	FOREIGN KEY (cp_Funcionário) REFERENCES Funcionário (cp_Funcionário)
 );
-
