@@ -1,0 +1,90 @@
+CREATE TABLE Produto (
+	nm_prod VARCHAR(255),
+	cd_ean_prod VARCHAR(255),
+	ce_rfid INT,
+	ce_categoria_principal INT,
+	ce_categoria_secundaria INT,
+	cp_Produto INT PRIMARY KEY,
+	idCategoria INT,
+	idRfid INT
+);
+
+CREATE TABLE Rfid (
+	ind_venda_dispositivo INT,
+	cp_Rfid INT PRIMARY KEY
+);
+
+CREATE TABLE Categoria (
+	nm_categoria VARCHAR(255),
+	cp_Categoria INT PRIMARY KEY
+);
+
+CREATE TABLE Estabelecimento (
+	nm_estab VARCHAR(255) NOT NULL,
+	cnpj_estab VARCHAR(255) NOT NULL,
+	localizacao_esta VARCHAR(255),
+	endereco_estab VARCHAR(255),
+	UF_estab VARCHAR(2),
+	cidade_estab VARCHAR(255),
+	cp_Estabelecimento INT PRIMARY KEY,
+	UNIQUE (cnpj_estab)
+);
+
+CREATE TABLE Fornecedor (
+	endereco_forn VARCHAR(255),
+	localizacao_forn VARCHAR(255),
+	cnpj_forn VARCHAR(255) NOT NULL,
+	UF_forn VARCHAR(2),
+	cidade_forn VARCHAR(255),
+	cp_Fornecedor INT PRIMARY KEY
+);
+
+CREATE TABLE Funcionário (
+	nm_func VARCHAR(255) NOT NULL,
+	cpf_func VARCHAR(11) NOT NULL,
+	cp_Funcionário INT PRIMARY KEY,
+	idFunção INT,
+	UNIQUE (cpf_func)
+);
+
+CREATE TABLE Função (
+	horas INT,
+	salario DECIMAL(10, 2),
+	nm_função VARCHAR(255),
+	cp_Função INT PRIMARY KEY
+);
+
+CREATE TABLE Fornece (
+	preço_de_venda DECIMAL(10, 2),
+	data_de_vencimento DATE,
+	data_de_venda DATE,
+	cp_Produto INT,
+	cp_Fornecedor INT,
+	PRIMARY KEY (cp_Produto, cp_Fornecedor)
+);
+
+CREATE TABLE Vende (
+	info_item_comprado VARCHAR(255),
+	preço DECIMAL(10, 2),
+	data_de_venda DATE,
+	cp_Estabelecimento INT,
+	cp_Produto INT,
+	PRIMARY KEY (cp_Estabelecimento, cp_Produto)
+);
+
+CREATE TABLE Repõem (
+	cp_Estabelecimento INT,
+	cp_Funcionário INT,
+	PRIMARY KEY (cp_Estabelecimento, cp_Funcionário)
+);
+
+ALTER TABLE Produto ADD FOREIGN KEY (idCategoria) REFERENCES Categoria (cp_Categoria);
+ALTER TABLE Produto ADD FOREIGN KEY (idRfid) REFERENCES Rfid (cp_Rfid);
+ALTER TABLE Funcionário ADD FOREIGN KEY (idFunção) REFERENCES Função (cp_Função);
+ALTER TABLE Fornece ADD FOREIGN KEY (cp_Produto) REFERENCES Produto (cp_Produto);
+ALTER TABLE Fornece ADD FOREIGN KEY (cp_Fornecedor) REFERENCES Fornecedor (cp_Fornecedor);
+ALTER TABLE Vende ADD FOREIGN KEY (cp_Estabelecimento) REFERENCES Estabelecimento (cp_Estabelecimento);
+ALTER TABLE Vende ADD FOREIGN KEY (cp_Produto) REFERENCES Produto (cp_Produto);
+ALTER TABLE Repõem ADD FOREIGN KEY (cp_Estabelecimento) REFERENCES Estabelecimento (cp_Estabelecimento);
+ALTER TABLE Repõem ADD FOREIGN KEY (cp_Funcionário) REFERENCES Funcionário (cp_Funcionário);
+
