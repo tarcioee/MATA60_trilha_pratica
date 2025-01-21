@@ -21,7 +21,7 @@ min_estoque_deposito INT,
 
 CREATE TABLE Produto (
 	nm_prod VARCHAR(60),
-localizacao_prod VARCHAR(8) NOT NULL CHECK (localizacao_prod  IN ('loja', 'deposito')),
+localizacao_prod VARCHAR(8) NOT NULL CHECK (localizacao_prod IN ('loja', 'deposito')),
 	cd_ean_prod VARCHAR(12) UNIQUE,
 	ce_categoria_principal INT,
 	ce_categoria_secundaria INT,
@@ -53,7 +53,7 @@ CREATE TABLE Fornecedor (
 );
 
 CREATE TABLE Funcionário (
-	nm_func VARCHAR(255) NOT NULL,
+	nm_func VARCHAR(200) NOT NULL,
 	cpf_func CHAR(11) NOT NULL UNIQUE,
 	cp_Funcionário INT PRIMARY KEY,
 	idFunção INT,

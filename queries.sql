@@ -1,4 +1,4 @@
-– Queries simples
+-- Queries simples
 -- 1. Selecionando todos os funcionários:
 SELECT * FROM Funcionário;
 
@@ -173,7 +173,8 @@ JOIN Vende ON Vende.cp_Produto = Produto.cp_Produto
 GROUP BY Produto.nm_prod, Estabelecimento.nm_estab
 ORDER BY total_fornecido DESC
 LIMIT 1;
-– Queries avançadas
+
+-- Queries avançadas
 -- 1. Selecionando o total de vendas por produto e estabelecimento, incluindo categoria e fornecedor:
 SELECT Estabelecimento.nm_estab, Produto.nm_prod, Categoria.nm_categoria, Fornecedor.cnpj_forn, SUM(Vende.quantidade) AS total_vendas
 FROM Vende
